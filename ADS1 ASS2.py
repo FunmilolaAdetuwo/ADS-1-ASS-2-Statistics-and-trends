@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-""" importing csv files into a pandas data frame """
+""" importing/reading csv files into a pandas data frame """
 
 
 def dataset(world_bank, country, column, indicators):
@@ -21,7 +21,8 @@ def dataset(world_bank, country, column, indicators):
     data = data[column]
     data.set_index('Country Name', inplace=True)
     data = data.loc[country]
-    return data, data.transpose()
+    transposed_data = data.transpose()
+    return data, transposed_data
 
 
 world_bank = 'API_19_DS2_en_csv_v2_5346672.csv'
@@ -52,13 +53,13 @@ print(yr_agric)
 plt.figure(figsize=(15, 9), dpi=600)
 
 # plot the agricultural land data for each country
-for i in range(len(country)):
-    plt.plot(yr_agric.index, yr_agric[country[i]], label=country[i])
+for n in range(len(country)):
+    plt.plot(yr_agric.index, yr_agric[country[n]], label=country[n])
 
 # add a legend and adjust its position
 plt.legend(bbox_to_anchor=(0, 1), fontsize=15)
 
-# add a title, x-axis label, and y-axis label
+# adding title, x-axis label, and y-axis label
 plt.title('Trend in Agricultural Land', fontsize=15)
 plt.xlabel('Year', fontsize=15)
 plt.ylabel('Agricultural Land (% of Land Area)', fontsize=15)
