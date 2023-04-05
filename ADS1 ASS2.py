@@ -6,117 +6,141 @@ Created on Thu Mar 30 02:17:39 2023
 """
 
 
-# importing different libraries
-import numpy as np
+# bringing in various libraries
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-"""reading csv files of Agricultural land(% of land area),Electricity Production from coal sources(% of total),
-     and  forest area (% of land area) into pandas data frame"""
+""" importing csv files into a pandas data frame """
 
 
-def dataset(filename, countries, columns, indicator):
-    df = pd.read_csv(filename, skiprows=4)
-    df = df[df['Indicator Name'] == indicator]
-    df = df[columns]
-    df.set_index('Country Name', inplace=True)
-    df = df.loc[countries]
-    return df, df.transpose()
+def dataset(world_bank, country, column, indicators):
+    data = pd.read_csv(world_bank, skiprows=4)
+    data = data[data['Indicator Name'] == indicators]
+    data = data[column]
+    data.set_index('Country Name', inplace=True)
+    data = data.loc[country]
+    return data, data.transpose()
 
 
-filename = 'API_19_DS2_en_csv_v2_5346672.csv'
-countries = ['Canada', 'Mexico', 'Belgium',
-             'North America', 'United Kingdom', 'Germany']
-columns = ['Country Name', '2010', '2011', '2012', '2013',
-           '2014', '2015', '2016', '2017', '2018', '2019', '2020']
+world_bank = 'API_19_DS2_en_csv_v2_5346672.csv'
+country = ['North America', 'Canada', 'Mexico',
+           'United Kingdom', 'Belgium', 'Germany']
+
+
+column = ['Country Name', '2010', '2011', '2012', '2013',
+          '2014', '2015', '2016', '2017', '2018', '2019', '2020']
+
 indicators = ['Agricultural land (% of land area)',
               'Electricity production from coal sources (% of total)', 'Forest area (% of land area)']
 
-country_agric, year_agric = dataset(
-    filename, countries, columns, indicators[0])
-country_electric, year_electric = dataset(
-    filename, countries, columns, indicators[1])
-country_forest, year_forest = dataset(
-    filename, countries, columns, indicators[2])
+country_agric, yr_agric = dataset(
+    world_bank, country, column, indicators[0])
+country_electric, yr_electric = dataset(
+    world_bank, country, column, indicators[1])
+country_forest, yr_forest = dataset(
+    world_bank, country, column, indicators[2])
 
-print(year_agric)
+print(yr_agric)
 
-# plotting line graph year on year Trend of the Agricultural land (% of land area) for the 6 countries
+# Annual line graph charting Trends for the 6 countries' agricultural land (percentage of total land area)
 
-plt.figure(figsize=(10, 7), dpi=500)
-for i in range(len(countries)):
-    plt.plot(year_agric.index, year_agric[countries[i]], label=countries[i])
-plt.legend(bbox_to_anchor=(1, 1), fontsize=20)
-plt.title('Trend of the Agricultural land', fontsize=20)
-plt.xlabel('Year', fontsize=20)
-plt.ylabel('Agricultural land (% of land area)', fontsize=20)
+
+# Annual line graph charting Trends for the 6 countries' agricultural land (percentage of total land area)
+# set the figure size and dpi
+plt.figure(figsize=(15, 9), dpi=600)
+
+# plot the agricultural land data for each country
+for i in range(len(country)):
+    plt.plot(yr_agric.index, yr_agric[country[i]], label=country[i])
+
+# add a legend and adjust its position
+plt.legend(bbox_to_anchor=(0, 1), fontsize=15)
+
+# add a title, x-axis label, and y-axis label
+plt.title('Trend in Agricultural Land', fontsize=15)
+plt.xlabel('Year', fontsize=15)
+plt.ylabel('Agricultural Land (% of Land Area)', fontsize=15)
+
+# display the plot
+plt.show()
+print(yr_electric.describe())
+
+# plotting line graph of the trend over time for the 6 countries'Electricity production from coal sources(as a percentage of the total)
+
+
+plt.figure(figsize=(15, 11), dpi=600)
+for x in range(len(country)):
+    plt.plot(yr_electric.index,
+             yr_electric[country[x]], label=country[x])
+plt.legend(bbox_to_anchor=(0, 1), fontsize=15)
+plt.title('The state of coal-based electricity production', fontsize=15)
+plt.xlabel('Year', fontsize=15)
+plt.ylabel('Electricity production from coal sources (% of total)', fontsize=15)
 plt.show()
 
-print(year_electric.describe())
 
-# plotting line graph year on year Trend of the Electricity production from coal sources (% of total) for the 6 countries
-
-
-plt.figure(figsize=(10, 7), dpi=500)
-for i in range(len(countries)):
-    plt.plot(year_electric.index,
-             year_electric[countries[i]], label=countries[i])
-plt.legend(bbox_to_anchor=(1, 1), fontsize=20)
-plt.title('Trend of the Electricity production from coal sources', fontsize=20)
-plt.xlabel('Year', fontsize=20)
-plt.ylabel('Electricity production from coal sources (% of total)', fontsize=20)
-plt.show()
-
-
-# plotting of grouped bar chart for Electricity production from coal sources (% of total) for different countries over the years
-
+# Showing a grouped bar graph for the amount of electricity produced from coal sources for various nations over time
 country_electric.plot(kind='bar')
-plt.title('Electricity production from coal sources', fontsize=20)
-plt.xlabel('Countries', fontsize=20)
-plt.ylabel('Electricity production from coal sources', fontsize=20)
+
+# adding a title, x-axis label, and y-axis label
+plt.title('Electricity Production from Coal Sources by Country', fontsize=15)
+plt.xlabel('Country', fontsize=15)
+plt.ylabel('Coal-fueled Electricity Production (% of Total)', fontsize=15)
+
+# setting the figure dpi
 plt.rcParams["figure.dpi"] = 1500
+
+# displaying the plot
 plt.show()
 
-# plotting of grouped bar chart for Agricultural land (% of land area) for different countries over the years
 
+# Agricultural land(% of land area) for several countries over time plotted as a grouped bar chart
 country_agric.plot(kind='bar')
-plt.title('Agricultural land', fontsize=20)
-plt.xlabel('Countries', fontsize=20)
-plt.ylabel('Forest area (% of land area)', fontsize=20)
-plt.rcParams["figure.dpi"] = 1500
-plt.show()
 
-print(year_agric['Canada'])
+# adding a title, x-axis label, and y-axis label
+plt.title('Agricultural Land by Country', fontsize=15)
+plt.xlabel('Country', fontsize=15)
+plt.ylabel('Agricultural Land (% of Land Area)', fontsize=15)
 
-# ploting of heatmap of Canada
+# setting the figure dpi
+plt.rcParams["figure.dpi"] = 1600
 
-Canada = pd.DataFrame(
-    {'Agricultural land': year_agric['Canada'],
-     'Elect prod from coal': year_electric['Canada'],
-     'Forest area': year_forest['Canada']},
-    ['2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020'])
-
-print(Canada.corr())
-
-plt.figure(figsize=(8, 5))
-sns.heatmap(Canada.corr(), annot=True, cmap='Reds')
-plt.title('Correlation heatmap Canada')
+# displaying the plot
 plt.show()
 
 
-# ploting of heatmap of Mexico
+print(yr_agric['Canada'])
 
-Mexico = pd.DataFrame(
-    {'Agricultural land': year_agric['Mexico'],
-     'Elect prod from coal': year_electric['Mexico'],
-     'Forest area': year_forest['Mexico']},
+# Showing heatmap for Canada
+
+Canada_data = pd.DataFrame(
+    {'Lands for Agriculture': yr_agric['Canada'],
+     'Electricity production from coal': yr_electric['Canada'],
+     'Forest areas': yr_forest['Canada']},
     ['2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020'])
 
-print(Mexico.corr())
+print(Canada_data.corr())
 
-plt.figure(figsize=(8, 5))
-sns.heatmap(Mexico.corr(), annot=True, cmap='Blues')
-plt.title('Correlation heatmap Mexico')
+plt.figure(figsize=(10, 7))
+sns.heatmap(Canada_data.corr(), cmap='magma', annot=True)
+plt.title('Heatmap for Canada')
+plt.show()
+
+
+# Showing heatmap for Mexico
+
+Mexico_data = pd.DataFrame(
+    {'Lands for Agriculture': yr_agric['Mexico'],
+     'Electricity production from coal': yr_electric['Mexico'],
+     'Forest areas': yr_forest['Mexico']},
+    ['2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020'])
+
+print(Mexico_data.corr())
+
+plt.figure(figsize=(12, 7))
+sns.heatmap(Mexico_data.corr(), cmap='viridis', annot=True)
+plt.title('Heatmap for Mexico')
+# showing the plot
 plt.show()
