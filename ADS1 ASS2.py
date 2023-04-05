@@ -91,3 +91,8 @@ Canada = pd.DataFrame(
 ['2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020'])
 
 print(Canada.corr())
+
+plt.figure(figsize=(8,5))
+sns.heatmap(Canada.corr(),annot=True,cmap='Reds')
+plt.title('Correlation heatmap Canada')
+plt.show()
