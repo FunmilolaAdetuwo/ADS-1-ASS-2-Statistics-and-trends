@@ -82,3 +82,12 @@ plt.show()
 
 print(year_agric['Canada'])
 
+#ploting of heatmap of Canada
+
+Canada = pd.DataFrame(
+{'Agricultural land': year_agric['Canada'],
+'Elect prod from coal': year_electric['Canada'],
+'Forest area': year_forest['Canada']},
+['2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020'])
+
+print(Canada.corr())
